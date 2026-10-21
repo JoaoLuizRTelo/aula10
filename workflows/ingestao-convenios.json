@@ -20,7 +20,7 @@
           "path": "base-convenios"
         }
       },
-      "id": "1bc2573e-e5ed-44c7-a811-1e42c52f0ba0",
+      "id": "537b1b0b-6b1d-46f7-a510-30f75dcba727",
       "name": "Enviar convênios",
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
@@ -33,7 +33,7 @@
       "parameters": {
         "jsCode": "// O formulário entrega todos os PDFs num único item (Documentos_0, Documentos_1, ...).\n// Aqui cada arquivo vira um item, com o binário em \"data\" e o nome do arquivo no JSON.\nconst saida = [];\nfor (const item of $input.all()) {\n  for (const chave of Object.keys(item.binary ?? {})) {\n    const arquivo = item.binary[chave];\n    saida.push({ json: { arquivo: arquivo.fileName }, binary: { data: arquivo } });\n  }\n}\nreturn saida;"
       },
-      "id": "5496c730-13d2-4f3e-8f57-d7c0201f13d3",
+      "id": "3109dd30-8308-45ca-8489-26a756711d50",
       "name": "Um item por arquivo",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -47,7 +47,7 @@
         "operation": "pdf",
         "options": {}
       },
-      "id": "fe434234-05cd-41e5-8590-1a319205ad71",
+      "id": "b58f45cb-7476-4bb8-a92a-d0943ff1e70c",
       "name": "Extrair texto",
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
@@ -63,7 +63,7 @@
         "clearStore": true,
         "embeddingBatchSize": 50
       },
-      "id": "b4691b41-7759-4f03-9c2d-aa898c61ec94",
+      "id": "e57c9f4c-101b-46a9-9883-5fa75e0b1484",
       "name": "Inserir na base",
       "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
       "typeVersion": 1.1,
@@ -79,7 +79,7 @@
         "completionMessage": "={{ $('Um item por arquivo').all().length }} arquivo(s) indexado(s) em {{ $input.all().length }} trecho(s).",
         "options": {}
       },
-      "id": "406d1411-4135-4b99-9230-87ac66d7609b",
+      "id": "5852d4a6-abd5-4ed2-a8ee-e2a605836afe",
       "name": "Base atualizada",
       "type": "n8n-nodes-base.form",
       "typeVersion": 1,
@@ -90,20 +90,21 @@
     },
     {
       "parameters": {
-        "model": "nomic-embed-text:latest"
+        "model": "text-embedding-3-small",
+        "options": {}
       },
-      "id": "cc0bf8fa-aa57-4648-a91a-f4a6565fb881",
+      "id": "0e28f7e3-5542-4a4d-908c-10324648fb5d",
       "name": "Embeddings",
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
-      "typeVersion": 1,
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
       "position": [
         560,
         220
       ],
       "credentials": {
-        "ollamaApi": {
+        "openAiApi": {
           "id": "",
-          "name": "Ollama"
+          "name": "OpenAI"
         }
       }
     },
@@ -127,7 +128,7 @@
           }
         }
       },
-      "id": "f5e298ac-cd53-4969-a503-b1be5fdccf2d",
+      "id": "fc6a7a13-241a-4d33-b3f1-f3832558f972",
       "name": "Carregar documento",
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1.1,
@@ -142,7 +143,7 @@
         "chunkOverlap": 150,
         "options": {}
       },
-      "id": "b355acbb-1ea3-433b-87e1-7a475fe054df",
+      "id": "039657b5-6425-4721-8707-c2f922dfc4d7",
       "name": "Dividir em trechos",
       "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
       "typeVersion": 1,

@@ -5,7 +5,7 @@
       "parameters": {
         "options": {}
       },
-      "id": "2025183b-790f-47b2-9cd5-778030f0206e",
+      "id": "46a7d3b5-6680-4e49-840b-a2c104b3d7a6",
       "name": "Mensagem recebida",
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.1,
@@ -20,7 +20,7 @@
           "systemMessage": "Você é a CLARA, assistente virtual do Núcleo de Convênios, um órgão hipotético usado em aula.\nResponda sempre em português do Brasil, em no máximo três parágrafos curtos. Nunca liste os convênios da base: informe só o convênio cujo número a pessoa deu. Não invente informação: o que você sabe sobre o Núcleo e sobre os convênios vem das ferramentas.\n\nFERRAMENTAS\n- Sub-agente_INFO: endereço, horário, telefone, e-mail e serviços do Núcleo.\n- Sub-agente_CONVENIOS: dados de um convênio (partes, representantes, objeto, valor, data). Só acione depois que a pessoa informar o número do convênio, no formato NNN/AAAA. Sem o número, peça o número e não acione a ferramenta. Envie a pergunta completa, com o número e o dado pedido, por exemplo \"valor e objeto do convênio 047/2026\".\n- Sub-agente_ATENDIMENTO: registra um chamado para a equipe humana. Antes de acionar, obtenha o nome completo, o e-mail e a descrição do problema; a descrição pode já ter vindo numa mensagem anterior da conversa, e então não peça de novo. Passe os três na mensagem para a ferramenta.\n\nROTEAMENTO\n- Saudação ou pergunta sobre você: responda direto, sem ferramenta, e apresente-se como CLARA.\n- Endereço, horário, contato ou serviços: Sub-agente_INFO.\n- Convênio, parceria, valor ou vigência: peça o número; com o número, Sub-agente_CONVENIOS.\n- Reclamação, caso que as outras ferramentas não resolvem ou pedido para falar com uma pessoa: colete os três dados e acione Sub-agente_ATENDIMENTO. Ao final, informe o protocolo devolvido."
         }
       },
-      "id": "8e749a83-5881-446c-91d8-357598767eee",
+      "id": "fd41b8ca-4023-466e-84c6-2eb3f29cb5df",
       "name": "CLARA",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
@@ -36,7 +36,7 @@
           "temperature": 0.2
         }
       },
-      "id": "a32349ea-1d6d-40da-b443-229b2eea1eb2",
+      "id": "1856e31c-9f6a-4c1e-909c-30bc617c2012",
       "name": "Modelo da CLARA",
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
       "parameters": {
         "contextWindowLength": 10
       },
-      "id": "ca391f14-4a01-412b-b462-953cb1d880a5",
+      "id": "1c891217-6a24-45b6-8bc1-53289e34cc3e",
       "name": "Memória",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
@@ -73,7 +73,7 @@
           "maxIterations": 4
         }
       },
-      "id": "d948a578-dae4-4dd1-9791-de643b98e6b7",
+      "id": "f31123e8-0ac4-4ae8-8b52-ecca4445bce9",
       "name": "Sub-agente INFO",
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
@@ -91,7 +91,7 @@
           "maxIterations": 4
         }
       },
-      "id": "8cf1a814-2e49-4fc8-b80c-084dbd46904d",
+      "id": "56b03274-ed3b-4cb5-95b4-632702f75f64",
       "name": "Sub-agente CONVENIOS",
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
@@ -109,7 +109,7 @@
           "maxIterations": 4
         }
       },
-      "id": "764298a7-db64-40d4-bf7d-dd72f0a350db",
+      "id": "635b5177-6386-4f4e-868b-1e9c51209d8d",
       "name": "Sub-agente ATENDIMENTO",
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
@@ -125,7 +125,7 @@
           "temperature": 0.2
         }
       },
-      "id": "3fe2fb5d-aa06-40c8-bb80-523a921d6d92",
+      "id": "ed74b0bc-9b88-4b5b-8a4b-26c2634e9336",
       "name": "Modelo dos sub-agentes",
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
@@ -149,7 +149,7 @@
         "topK": 4,
         "includeDocumentMetadata": true
       },
-      "id": "b8a5071a-12ef-4c67-b18e-0c456afe0a51",
+      "id": "80d373bd-cd20-4c29-8865-79526c5e5997",
       "name": "Base de convenios",
       "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
       "typeVersion": 1.1,
@@ -160,20 +160,21 @@
     },
     {
       "parameters": {
-        "model": "nomic-embed-text:latest"
+        "model": "text-embedding-3-small",
+        "options": {}
       },
-      "id": "cc716104-5a85-4687-b367-c4aad9c5b293",
+      "id": "53226232-60a5-4389-80c9-7dee80c2e6d0",
       "name": "Embeddings",
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
-      "typeVersion": 1,
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
       "position": [
         620,
         700
       ],
       "credentials": {
-        "ollamaApi": {
+        "openAiApi": {
           "id": "",
-          "name": "Ollama"
+          "name": "OpenAI"
         }
       }
     },
@@ -247,7 +248,7 @@
         },
         "options": {}
       },
-      "id": "b46449b8-b64a-471d-826e-b5abcbf4f371",
+      "id": "1ce6097e-bbb5-41d3-b123-1b4a1fa0c86b",
       "name": "Registrar chamado",
       "type": "n8n-nodes-base.dataTableTool",
       "typeVersion": 1,

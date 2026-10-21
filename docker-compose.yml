@@ -1,0 +1,19 @@
+# n8n local para a Aula 10 (substitui o docker-compose.yml da Aula 09).
+# Subir:   docker compose up -d
+# Testar:  curl http://localhost:5678/healthz  -> {"status":"ok"}
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=America/Cuiaba
+      - TZ=America/Cuiaba
+      - N8N_RUNNERS_ENABLED=true
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:

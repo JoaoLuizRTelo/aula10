@@ -2,7 +2,7 @@
 
 Grupo: _(nomes)_
 Data dos testes: _(dd/mm/aaaa)_
-Ambiente: n8n _(versão)_ · Groq `openai/gpt-oss-120b` (CLARA) e `openai/gpt-oss-20b` (sub-agentes) · Ollama `nomic-embed-text`
+Ambiente: n8n _(versão)_ · Groq `openai/gpt-oss-120b` (CLARA) e `openai/gpt-oss-20b` (sub-agentes) · OpenAI `text-embedding-3-small` (embeddings, no lugar do Ollama — Quadro 2 da apostila, autorizado pelo professor)
 
 Pré-condição: base `convenios` carregada pelo formulário `/form/base-convenios`, com a mensagem
 "3 arquivo(s) indexado(s) em 3 trecho(s)". Cada cenário roda numa sessão nova do chat
