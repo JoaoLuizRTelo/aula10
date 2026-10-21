@@ -1,239 +1,287 @@
-{
-  "name": "Aula 10 - Ingestão dos convênios",
-  "nodes": [
-    {
-      "parameters": {
-        "formTitle": "Base de convênios",
-        "formDescription": "Envie os PDFs dos convênios. O envio substitui a base anterior.",
-        "formFields": {
-          "values": [
-            {
-              "fieldLabel": "Documentos",
-              "fieldType": "file",
-              "multipleFiles": true,
-              "acceptFileTypes": ".pdf",
-              "requiredField": true
-            }
-          ]
-        },
-        "options": {
-          "path": "base-convenios"
-        }
-      },
-      "id": "537b1b0b-6b1d-46f7-a510-30f75dcba727",
-      "name": "Enviar convênios",
-      "type": "n8n-nodes-base.formTrigger",
-      "typeVersion": 2.2,
-      "position": [
-        0,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "// O formulário entrega todos os PDFs num único item (Documentos_0, Documentos_1, ...).\n// Aqui cada arquivo vira um item, com o binário em \"data\" e o nome do arquivo no JSON.\nconst saida = [];\nfor (const item of $input.all()) {\n  for (const chave of Object.keys(item.binary ?? {})) {\n    const arquivo = item.binary[chave];\n    saida.push({ json: { arquivo: arquivo.fileName }, binary: { data: arquivo } });\n  }\n}\nreturn saida;"
-      },
-      "id": "3109dd30-8308-45ca-8489-26a756711d50",
-      "name": "Um item por arquivo",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        220,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "pdf",
-        "options": {}
-      },
-      "id": "b58f45cb-7476-4bb8-a92a-d0943ff1e70c",
-      "name": "Extrair texto",
-      "type": "n8n-nodes-base.extractFromFile",
-      "typeVersion": 1,
-      "position": [
-        440,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "mode": "insert",
-        "memoryKey": "convenios",
-        "clearStore": true,
-        "embeddingBatchSize": 50
-      },
-      "id": "e57c9f4c-101b-46a9-9883-5fa75e0b1484",
-      "name": "Inserir na base",
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
-      "typeVersion": 1.1,
-      "position": [
-        660,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "completion",
-        "completionTitle": "Base atualizada",
-        "completionMessage": "={{ $('Um item por arquivo').all().length }} arquivo(s) indexado(s) em {{ $input.all().length }} trecho(s).",
-        "options": {}
-      },
-      "id": "5852d4a6-abd5-4ed2-a8ee-e2a605836afe",
-      "name": "Base atualizada",
-      "type": "n8n-nodes-base.form",
-      "typeVersion": 1,
-      "position": [
-        1000,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "model": "text-embedding-3-small",
-        "options": {}
-      },
-      "id": "0e28f7e3-5542-4a4d-908c-10324648fb5d",
-      "name": "Embeddings",
-      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        560,
-        220
-      ],
-      "credentials": {
-        "openAiApi": {
-          "id": "",
-          "name": "OpenAI"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsonMode": "expressionData",
-        "jsonData": "={{ $json.text }}",
-        "textSplittingMode": "custom",
-        "options": {
-          "metadata": {
-            "metadataValues": [
+[
+  {
+    "updatedAt": "2026-10-21T00:40:20.000Z",
+    "createdAt": "2026-10-21T00:19:43.335Z",
+    "id": "3m0JC7NUZWoabTbi",
+    "name": "Aula 10 - Ingestão dos convênios",
+    "description": null,
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "formTitle": "Base de convênios",
+          "formDescription": "Envie os PDFs dos convênios. O envio substitui a base anterior.",
+          "formFields": {
+            "values": [
               {
-                "name": "arquivo",
-                "value": "={{ $('Um item por arquivo').item.json.arquivo }}"
-              },
-              {
-                "name": "convenio",
-                "value": "={{ $json.text.match(/N[º°o]\\s*(\\d+\\/\\d{4})/)?.[1] ?? '' }}"
+                "fieldLabel": "Documentos",
+                "fieldType": "file",
+                "multipleFiles": true,
+                "acceptFileTypes": ".pdf",
+                "requiredField": true
               }
             ]
+          },
+          "options": {
+            "path": "base-convenios"
+          }
+        },
+        "id": "537b1b0b-6b1d-46f7-a510-30f75dcba727",
+        "name": "Enviar convênios",
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.2,
+        "position": [
+          0,
+          0
+        ],
+        "webhookId": "fa75965d-e6b6-4fbe-b54a-94b5fe44e441"
+      },
+      {
+        "parameters": {
+          "jsCode": "// O formulário entrega todos os PDFs num único item (Documentos_0, Documentos_1, ...).\n// Aqui cada arquivo vira um item, com o binário em \"data\" e o nome do arquivo no JSON.\nconst saida = [];\nfor (const item of $input.all()) {\n  for (const chave of Object.keys(item.binary ?? {})) {\n    const arquivo = item.binary[chave];\n    saida.push({ json: { arquivo: arquivo.fileName }, binary: { data: arquivo } });\n  }\n}\nreturn saida;"
+        },
+        "id": "3109dd30-8308-45ca-8489-26a756711d50",
+        "name": "Um item por arquivo",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          220,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "options": {}
+        },
+        "id": "b58f45cb-7476-4bb8-a92a-d0943ff1e70c",
+        "name": "Extrair texto",
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          440,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "memoryKey": {
+            "__rl": true,
+            "mode": "list",
+            "value": "convenios",
+            "cachedResultName": "convenios"
+          },
+          "clearStore": true,
+          "embeddingBatchSize": 50
+        },
+        "id": "e57c9f4c-101b-46a9-9883-5fa75e0b1484",
+        "name": "Inserir na base",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+        "typeVersion": 1.3,
+        "position": [
+          660,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "completion",
+          "completionTitle": "Base atualizada",
+          "completionMessage": "={{ $('Um item por arquivo').all().length }} arquivo(s) indexado(s) em {{ $input.all().length }} trecho(s).",
+          "options": {}
+        },
+        "id": "5852d4a6-abd5-4ed2-a8ee-e2a605836afe",
+        "name": "Base atualizada",
+        "type": "n8n-nodes-base.form",
+        "typeVersion": 1,
+        "position": [
+          1000,
+          0
+        ],
+        "webhookId": "509add9a-b3fa-401b-a486-eca3b45e845f"
+      },
+      {
+        "parameters": {
+          "model": "text-embedding-3-small",
+          "options": {}
+        },
+        "id": "0e28f7e3-5542-4a4d-908c-10324648fb5d",
+        "name": "Embeddings",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          560,
+          220
+        ],
+        "credentials": {
+          "openAiApi": {
+            "id": "PBLVTnu8IL8ruhcq",
+            "name": "OpenAI"
           }
         }
       },
-      "id": "fc6a7a13-241a-4d33-b3f1-f3832558f972",
-      "name": "Carregar documento",
-      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
-      "typeVersion": 1.1,
-      "position": [
-        760,
-        220
-      ]
-    },
-    {
-      "parameters": {
-        "chunkSize": 1000,
-        "chunkOverlap": 150,
-        "options": {}
+      {
+        "parameters": {
+          "jsonMode": "expressionData",
+          "jsonData": "={{ $json.text }}",
+          "textSplittingMode": "custom",
+          "options": {
+            "metadata": {
+              "metadataValues": [
+                {
+                  "name": "arquivo",
+                  "value": "={{ $('Um item por arquivo').item.json.arquivo }}"
+                },
+                {
+                  "name": "convenio",
+                  "value": "={{ $json.text.match(/N[º°o]\\s*(\\d+\\/\\d{4})/)?.[1] ?? '' }}"
+                }
+              ]
+            }
+          }
+        },
+        "id": "fc6a7a13-241a-4d33-b3f1-f3832558f972",
+        "name": "Carregar documento",
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1.1,
+        "position": [
+          760,
+          220
+        ]
       },
-      "id": "039657b5-6425-4721-8707-c2f922dfc4d7",
-      "name": "Dividir em trechos",
-      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
-      "typeVersion": 1,
-      "position": [
-        860,
-        420
-      ]
+      {
+        "parameters": {
+          "chunkSize": 1000,
+          "chunkOverlap": 150,
+          "options": {}
+        },
+        "id": "039657b5-6425-4721-8707-c2f922dfc4d7",
+        "name": "Dividir em trechos",
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          860,
+          420
+        ]
+      }
+    ],
+    "connections": {
+      "Enviar convênios": {
+        "main": [
+          [
+            {
+              "node": "Um item por arquivo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Um item por arquivo": {
+        "main": [
+          [
+            {
+              "node": "Extrair texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extrair texto": {
+        "main": [
+          [
+            {
+              "node": "Inserir na base",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Inserir na base": {
+        "main": [
+          [
+            {
+              "node": "Base atualizada",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Inserir na base",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Carregar documento": {
+        "ai_document": [
+          [
+            {
+              "node": "Inserir na base",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Dividir em trechos": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Carregar documento",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "nodeGroups": [],
+    "pinData": {},
+    "versionId": "2068be0a-877a-4e6c-812e-d565f19e7924",
+    "activeVersionId": "2068be0a-877a-4e6c-812e-d565f19e7924",
+    "versionCounter": 3,
+    "triggerCount": 1,
+    "sourceWorkflowId": null,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-10-21T00:19:43.337Z",
+        "createdAt": "2026-10-21T00:19:43.337Z",
+        "role": "workflow:owner",
+        "workflowId": "3m0JC7NUZWoabTbi",
+        "projectId": "1e3UfHXtQ7pEJAvQ",
+        "project": {
+          "updatedAt": "2026-06-24T18:57:42.327Z",
+          "createdAt": "2026-06-24T18:56:07.884Z",
+          "id": "1e3UfHXtQ7pEJAvQ",
+          "name": "joao telo <joaoluiztelo7@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "customTelemetryTags": [],
+          "creatorId": "b971f454-6fcc-464d-995e-7ac45944d38f"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
     }
-  ],
-  "connections": {
-    "Enviar convênios": {
-      "main": [
-        [
-          {
-            "node": "Um item por arquivo",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Um item por arquivo": {
-      "main": [
-        [
-          {
-            "node": "Extrair texto",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extrair texto": {
-      "main": [
-        [
-          {
-            "node": "Inserir na base",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Inserir na base": {
-      "main": [
-        [
-          {
-            "node": "Base atualizada",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Embeddings": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Inserir na base",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Carregar documento": {
-      "ai_document": [
-        [
-          {
-            "node": "Inserir na base",
-            "type": "ai_document",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Dividir em trechos": {
-      "ai_textSplitter": [
-        [
-          {
-            "node": "Carregar documento",
-            "type": "ai_textSplitter",
-            "index": 0
-          }
-        ]
-      ]
-    }
-  },
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "pinData": {}
-}
+  }
+]
