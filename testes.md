@@ -1,6 +1,6 @@
 # Aula 10 — Testes da CLARA multiagente
 
-Grupo: _(nomes)_
+Grupo: Bruno Ramos, João Luiz, Marcos Vinicius, Vitor Rodrigo
 Data dos testes: 20/10/2026
 Ambiente: n8n 2.27.4 em Docker · Groq `openai/gpt-oss-120b` (CLARA) e `openai/gpt-oss-20b` (sub-agentes) · OpenAI `text-embedding-3-small` (embeddings, no lugar do Ollama — Quadro 2 da apostila, autorizado pelo professor)
 
